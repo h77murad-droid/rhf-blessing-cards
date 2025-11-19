@@ -39,7 +39,7 @@ export default function AdminDashboard() {
       color: 'maroon',
     },
     {
-      title: 'إجمالي التبرعات',
+      title: 'إجمالي التبرعات عبر المنصة',
       value: '12,470 د.ب',
       change: '+18%',
       trend: 'up',
@@ -55,7 +55,7 @@ export default function AdminDashboard() {
       color: 'maroon',
     },
     {
-      title: 'معدل الرضا',
+      title: 'معدل رضا المستخدمين',
       value: '98.5%',
       change: '+2%',
       trend: 'up',
@@ -78,7 +78,7 @@ export default function AdminDashboard() {
       id: 'ORD-002',
       sender: 'سارة خالد',
       recipient: 'مريم حسن',
-      occasion: 'مولود',
+      occasion: 'مولود جديد',
       amount: 8,
       status: 'completed',
       date: '2025-11-19',
@@ -96,7 +96,7 @@ export default function AdminDashboard() {
       id: 'ORD-004',
       sender: 'نورة سعيد',
       recipient: 'خديجة محمد',
-      occasion: 'عيد',
+      occasion: 'عيد الفطر',
       amount: 5,
       status: 'completed',
       date: '2025-11-18',
@@ -105,7 +105,7 @@ export default function AdminDashboard() {
       id: 'ORD-005',
       sender: 'عبدالرحمن يوسف',
       recipient: 'إبراهيم خالد',
-      occasion: 'شكر',
+      occasion: 'شكر وتقدير',
       amount: 6,
       status: 'failed',
       date: '2025-11-17',
@@ -140,7 +140,7 @@ export default function AdminDashboard() {
         return (
           <span className="badge bg-error/10 text-error">
             <XCircle className="w-3 h-3 inline ml-1" />
-            فشل
+            فشل في التنفيذ
           </span>
         );
       default:
@@ -162,24 +162,27 @@ export default function AdminDashboard() {
               >
                 {sidebarOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
-              
+
               <Link href="/" className="flex items-center gap-3">
                 <div className="w-10 h-10 bg-gradient-to-br from-maroon to-maroon-dark rounded-lg flex items-center justify-center shadow-maroon">
                   <Heart className="w-5 h-5 text-white" fill="currentColor" />
                 </div>
                 <div className="hidden md:block">
-                  <div className="font-bold text-maroon">لوحة التحكم</div>
-                  <div className="text-xs text-gray-light">RHF Admin</div>
+                  <div className="font-bold text-maroon">لوحة تحكم بطاقات الخير</div>
+                  <div className="text-xs text-gray-light">RHF Blessing Cards – Admin</div>
                 </div>
               </Link>
             </div>
 
             {/* Actions */}
             <div className="flex items-center gap-4">
-              <Link href="/" className="text-gray hover:text-maroon font-medium transition-colors text-sm">
-                العودة للموقع
+              <Link
+                href="/"
+                className="text-gray hover:text-maroon font-medium transition-colors text-sm"
+              >
+                العودة للواجهة الرئيسية
               </Link>
-              <button className="p-2 text-gray hover:text-maroon transition-colors">
+              <button className="p-2 text-gray hover:text-maroon transition-colors" title="تسجيل الخروج">
                 <LogOut className="w-5 h-5" />
               </button>
             </div>
@@ -224,8 +227,13 @@ export default function AdminDashboard() {
             <>
               {/* Welcome Section */}
               <div className="mb-8">
-                <h1 className="text-3xl font-bold text-gray-dark mb-2">مرحباً بك</h1>
-                <p className="text-gray">إليك نظرة عامة على أداء المنصة</p>
+                <h1 className="text-3xl font-bold text-gray-dark mb-2">
+                  مرحباً بك في لوحة التحكم
+                </h1>
+                <p className="text-gray">
+                  من هنا يمكنك متابعة أداء منصة بطاقات الخير، والاطلاع على التبرعات والطلبات
+                  والمستخدمين بشكل مستمر.
+                </p>
               </div>
 
               {/* Stats Grid */}
@@ -245,7 +253,11 @@ export default function AdminDashboard() {
                       >
                         <stat.icon className="w-6 h-6 text-white" />
                       </div>
-                      <span className={`text-sm font-medium ${stat.trend === 'up' ? 'text-success' : 'text-error'}`}>
+                      <span
+                        className={`text-sm font-medium ${
+                          stat.trend === 'up' ? 'text-success' : 'text-error'
+                        }`}
+                      >
                         {stat.change}
                       </span>
                     </div>
@@ -262,13 +274,15 @@ export default function AdminDashboard() {
                   <div className="flex items-center justify-between mb-6">
                     <h2 className="text-xl font-bold text-gray-dark">التبرعات الشهرية</h2>
                     <button className="text-maroon hover:text-maroon-dark text-sm font-medium">
-                      عرض التقرير
+                      عرض تقرير مفصل
                     </button>
                   </div>
                   <div className="h-64 flex items-center justify-center bg-beige rounded-lg">
                     <div className="text-center text-gray">
                       <BarChart3 className="w-16 h-16 mx-auto mb-2 text-gray-light" />
-                      <p className="text-sm">الرسم البياني للتبرعات</p>
+                      <p className="text-sm">
+                        سيتم عرض الرسم البياني الحقيقي بعد ربط البيانات الفعلية بالمنصة.
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -276,18 +290,20 @@ export default function AdminDashboard() {
                 {/* Popular Occasions */}
                 <div className="bg-white rounded-xl p-6 shadow-md border border-gray-lighter">
                   <div className="flex items-center justify-between mb-6">
-                    <h2 className="text-xl font-bold text-gray-dark">المناسبات الأكثر طلباً</h2>
+                    <h2 className="text-xl font-bold text-gray-dark">المناسبات الأكثر استخداماً</h2>
                   </div>
                   <div className="space-y-4">
                     {[
                       { name: 'مناسبات الأفراح', count: 342, percentage: 65 },
-                      { name: 'مناسبات دينية', count: 218, percentage: 45 },
-                      { name: 'مناسبات اجتماعية', count: 156, percentage: 35 },
+                      { name: 'المناسبات الدينية', count: 218, percentage: 45 },
+                      { name: 'النجاح والإنجاز', count: 156, percentage: 35 },
                       { name: 'الشكر والتقدير', count: 124, percentage: 28 },
                     ].map((occasion, index) => (
                       <div key={index}>
                         <div className="flex items-center justify-between mb-2">
-                          <span className="text-sm font-medium text-gray-dark">{occasion.name}</span>
+                          <span className="text-sm font-medium text-gray-dark">
+                            {occasion.name}
+                          </span>
                           <span className="text-sm text-gray">{occasion.count}</span>
                         </div>
                         <div className="h-2 bg-beige rounded-full overflow-hidden">
@@ -310,11 +326,11 @@ export default function AdminDashboard() {
                     <div className="flex items-center gap-3">
                       <button className="btn-outline text-sm py-2">
                         <Filter className="w-4 h-4 ml-2" />
-                        فلترة
+                        فلترة متقدمة
                       </button>
                       <button className="btn-primary text-sm py-2">
                         <Download className="w-4 h-4 ml-2" />
-                        تصدير
+                        تصدير إلى ملف
                       </button>
                     </div>
                   </div>
@@ -324,24 +340,44 @@ export default function AdminDashboard() {
                   <table className="w-full">
                     <thead className="bg-beige">
                       <tr>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">رقم الطلب</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">المرسل</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">المستلم</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">المناسبة</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">المبلغ</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">الحالة</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">التاريخ</th>
-                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">إجراءات</th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          رقم الطلب
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          المرسل
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          المستلم
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          المناسبة
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          مبلغ التبرع
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          حالة الطلب
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          التاريخ
+                        </th>
+                        <th className="px-6 py-3 text-right text-xs font-bold text-gray-dark">
+                          إجراءات
+                        </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-lighter">
                       {recentOrders.map((order) => (
                         <tr key={order.id} className="hover:bg-beige transition-colors">
-                          <td className="px-6 py-4 text-sm font-medium text-gray-dark">{order.id}</td>
+                          <td className="px-6 py-4 text-sm font-medium text-gray-dark">
+                            {order.id}
+                          </td>
                           <td className="px-6 py-4 text-sm text-gray">{order.sender}</td>
                           <td className="px-6 py-4 text-sm text-gray">{order.recipient}</td>
                           <td className="px-6 py-4 text-sm text-gray">{order.occasion}</td>
-                          <td className="px-6 py-4 text-sm font-medium text-maroon">{order.amount} د.ب</td>
+                          <td className="px-6 py-4 text-sm font-medium text-maroon">
+                            {order.amount} د.ب
+                          </td>
                           <td className="px-6 py-4">{getStatusBadge(order.status)}</td>
                           <td className="px-6 py-4 text-sm text-gray">{order.date}</td>
                           <td className="px-6 py-4">
@@ -362,7 +398,10 @@ export default function AdminDashboard() {
             <div className="text-center py-16">
               <CreditCard className="w-24 h-24 mx-auto mb-6 text-gray-light" />
               <h2 className="text-2xl font-bold text-gray-dark mb-2">إدارة الطلبات</h2>
-              <p className="text-gray">سيتم عرض جميع الطلبات هنا</p>
+              <p className="text-gray max-w-md mx-auto">
+                في هذه الصفحة ستتم إدارة جميع طلبات البطاقات الخيرية، مع إمكانية المتابعة،
+                والتصفية، والتصدير، حال ربطها بقاعدة البيانات الفعلية.
+              </p>
             </div>
           )}
 
@@ -370,23 +409,32 @@ export default function AdminDashboard() {
             <div className="text-center py-16">
               <Users className="w-24 h-24 mx-auto mb-6 text-gray-light" />
               <h2 className="text-2xl font-bold text-gray-dark mb-2">إدارة المستخدمين</h2>
-              <p className="text-gray">سيتم عرض جميع المستخدمين هنا</p>
+              <p className="text-gray max-w-md mx-auto">
+                سيتم لاحقاً عرض قائمة المستخدمين، وصلاحيات كل مستخدم، وإمكانية إدارة الحسابات
+                والتواصل معهم.
+              </p>
             </div>
           )}
 
           {activeTab === 'analytics' && (
             <div className="text-center py-16">
               <BarChart3 className="w-24 h-24 mx-auto mb-6 text-gray-light" />
-              <h2 className="text-2xl font-bold text-gray-dark mb-2">التحليلات المتقدمة</h2>
-              <p className="text-gray">سيتم عرض التحليلات والتقارير هنا</p>
+              <h2 className="text-2xl font-bold text-gray-dark mb-2">التحليلات والتقارير</h2>
+              <p className="text-gray max-w-md mx-auto">
+                هنا ستظهر مؤشرات الأداء الرئيسية للمنصة، مثل نمو التبرعات، وعدد البطاقات، وتفاعل
+                المستخدمين، بعد تفعيل التكامل مع بيانات النظام.
+              </p>
             </div>
           )}
 
           {activeTab === 'settings' && (
             <div className="text-center py-16">
               <Settings className="w-24 h-24 mx-auto mb-6 text-gray-light" />
-              <h2 className="text-2xl font-bold text-gray-dark mb-2">الإعدادات</h2>
-              <p className="text-gray">سيتم عرض إعدادات المنصة هنا</p>
+              <h2 className="text-2xl font-bold text-gray-dark mb-2">إعدادات المنصة</h2>
+              <p className="text-gray max-w-md mx-auto">
+                من هذه الصفحة سيتم لاحقاً التحكم بإعدادات المنصة، وأنواع البطاقات، وقنوات الدفع،
+                وخيارات الإشعارات والإدارة.
+              </p>
             </div>
           )}
         </main>
