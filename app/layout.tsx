@@ -3,7 +3,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   title: 'منصة بطاقات الخير - RHF Blessing Cards',
-  description: 'منصة البطاقات الرقمية الخيرية من مؤسسة البحرين الملكية للأعمال الإنسانية',
+  description: 'منصة البطاقات الرقمية الخيرية من المؤسسة الملكية للأعمال الإنسانية',
   keywords: ['بطاقات', 'خير', 'تبرع', 'مناسبات', 'البحرين', 'RHF'],
   authors: [{ name: 'Royal Humanitarian Foundation' }],
   openGraph: {
