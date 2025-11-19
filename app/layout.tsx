@@ -1,31 +1,45 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
+import type { ReactNode } from 'react';
 import './globals.css';
 
 export const metadata: Metadata = {
   title: 'منصة بطاقات الخير - RHF Blessing Cards',
-  description: 'منصة البطاقات الرقمية الخيرية من المؤسسة الملكية للأعمال الإنسانية',
-  keywords: ['بطاقات', 'خير', 'تبرع', 'مناسبات', 'البحرين', 'RHF'],
-  authors: [{ name: 'Royal Humanitarian Foundation' }],
+  description:
+    'منصة البطاقات الرقمية الخيرية التابعة للمؤسسة الملكية للأعمال الإنسانية في مملكة البحرين.',
+  keywords: [
+    'منصة بطاقات الخير',
+    'بطاقات خيرية',
+    'منصة خيرية',
+    'تبرع',
+    'تبرعات',
+    'المؤسسة الملكية للأعمال الإنسانية',
+    'RHF',
+    'البحرين',
+  ],
+  authors: [{ name: 'Royal Humanitarian Foundation (RHF)' }],
   openGraph: {
     title: 'منصة بطاقات الخير - RHF Blessing Cards',
-    description: 'منصة البطاقات الرقمية الخيرية من مؤسسة البحرين الملكية للأعمال الإنسانية',
+    description:
+      'منصة رقمية مبتكرة لإرسال بطاقات خيرية ودعم مشاريع المؤسسة الملكية للأعمال الإنسانية.',
     type: 'website',
     locale: 'ar_BH',
-  },
-  viewport: {
-    width: 'device-width',
-    initialScale: 1,
-    maximumScale: 5,
   },
   icons: {
     icon: '/favicon.ico',
   },
 };
 
+// تعريف الـ viewport بشكل منفصل (الطريقة الصحيحة في Next.js 14)
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+};
+
 export default function RootLayout({
   children,
 }: {
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
     <html lang="ar" dir="rtl">
