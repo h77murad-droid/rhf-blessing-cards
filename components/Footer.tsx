@@ -73,7 +73,7 @@ export default function Footer() {
               <li className="flex items-center gap-3">
                 <Phone className="w-5 h-5 text-maroon flex-shrink-0" />
                 <a href="tel:+97317313666" className="footer-link">
-                  +973 1756 1700
+                  +973 17313666
                 </a>
               </li>
 
