@@ -2,18 +2,25 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { usePathname } from 'next/navigation';
 import { Menu, X, Heart } from 'lucide-react';
 
 export default function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
     { href: '/', label: 'الرئيسية' },
     { href: '/occasions', label: 'المناسبات' },
     { href: '/cards/all', label: 'البطاقات' },
-    { href: '/about', label: 'من نحن' },
-    { href: '/contact', label: 'اتصل بنا' },
+    { href: '/about', label: 'عن المنصة' },
+    { href: '/contact', label: 'تواصل معنا' },
   ];
+
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/';
+    return pathname?.startsWith(href);
+  };
 
   return (
     <nav className="sticky top-0 z-fixed bg-white/95 backdrop-blur-sm border-b border-gray-lighter shadow-sm">
@@ -26,7 +33,9 @@ export default function Navbar() {
             </div>
             <div className="hidden md:block">
               <div className="text-lg font-bold text-maroon">منصة بطاقات الخير</div>
-              <div className="text-xs text-gray-light">RHF Blessing Cards</div>
+              <div className="text-xs text-gray-light">
+                مبادرة المؤسسة الملكية للأعمال الإنسانية
+              </div>
             </div>
           </Link>
 
@@ -36,20 +45,33 @@ export default function Navbar() {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-gray hover:text-maroon font-medium transition-colors duration-base"
+                className={[
+                  'font-medium transition-colors duration-base',
+                  isActive(link.href)
+                    ? 'text-maroon'
+                    : 'text-gray hover:text-maroon',
+                ].join(' ')}
               >
                 {link.label}
               </Link>
             ))}
           </div>
 
-          {/* CTA Button */}
+          {/* Desktop CTA */}
           <div className="hidden lg:flex items-center gap-4">
-            <Link href="/admin" className="text-gray hover:text-maroon font-medium transition-colors duration-base">
+            <Link
+              href="/admin"
+              className={[
+                'font-medium transition-colors duration-base text-sm',
+                isActive('/admin')
+                  ? 'text-maroon'
+                  : 'text-gray hover:text-maroon',
+              ].join(' ')}
+            >
               لوحة التحكم
             </Link>
             <Link href="/cards/all" className="btn-primary">
-              أرسل بطاقة خير
+              أرسل بطاقة خير الآن
             </Link>
           </div>
 
@@ -75,25 +97,37 @@ export default function Navbar() {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className="text-gray hover:text-maroon font-medium py-2 transition-colors duration-base"
+                  className={[
+                    'font-medium py-2 transition-colors duration-base',
+                    isActive(link.href)
+                      ? 'text-maroon'
+                      : 'text-gray hover:text-maroon',
+                  ].join(' ')}
                   onClick={() => setMobileMenuOpen(false)}
                 >
                   {link.label}
                 </Link>
               ))}
+
               <Link
                 href="/admin"
-                className="text-gray hover:text-maroon font-medium py-2 transition-colors duration-base border-t border-gray-lighter mt-2 pt-4"
+                className={[
+                  'font-medium py-2 transition-colors duration-base border-t border-gray-lighter mt-2 pt-4',
+                  isActive('/admin')
+                    ? 'text-maroon'
+                    : 'text-gray hover:text-maroon',
+                ].join(' ')}
                 onClick={() => setMobileMenuOpen(false)}
               >
                 لوحة التحكم
               </Link>
+
               <Link
                 href="/cards/all"
                 className="btn-primary text-center"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                أرسل بطاقة خير
+                أرسل بطاقة خير الآن
               </Link>
             </div>
           </div>
