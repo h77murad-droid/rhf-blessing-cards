@@ -1,5 +1,14 @@
 import Link from 'next/link';
-import { Heart, Gift, Users, TrendingUp, ArrowLeft, Sparkles, Shield, Clock } from 'lucide-react';
+import {
+  Heart,
+  Gift,
+  Users,
+  TrendingUp,
+  ArrowLeft,
+  Sparkles,
+  Shield,
+  Clock,
+} from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import OccasionCard from '@/components/OccasionCard';
@@ -8,42 +17,42 @@ export default function HomePage() {
   const occasions = [
     {
       title: 'مناسبات الأفراح',
-      description: 'بطاقات تهنئة للزفاف والخطوبة والمواليد',
+      description: 'بطاقات تهنئة للزفاف والخطوبة واستقبال المواليد',
       icon: '🎊',
       count: 24,
       href: '/cards/celebrations',
     },
     {
-      title: 'مناسبات دينية',
-      description: 'بطاقات للأعياد والمناسبات الإسلامية',
+      title: 'المناسبات الدينية',
+      description: 'بطاقات للعيدين والمناسبات الإسلامية الخاصة',
       icon: '🌙',
       count: 18,
       href: '/cards/religious',
     },
     {
-      title: 'مناسبات اجتماعية',
-      description: 'بطاقات للنجاح والتخرج والترقية',
+      title: 'النجاح والإنجاز',
+      description: 'بطاقات للنجاح والتخرج والترقية والإنجازات المهنية',
       icon: '🎓',
       count: 15,
       href: '/cards/social',
     },
     {
-      title: 'التعازي والمواساة',
-      description: 'بطاقات للتعبير عن المواساة والدعم',
+      title: 'التعزية والمواساة',
+      description: 'بطاقات للتعبير عن التعازي والمواساة والدعاء',
       icon: '🤲',
       count: 12,
       href: '/cards/condolences',
     },
     {
       title: 'الشكر والتقدير',
-      description: 'بطاقات للشكر والامتنان',
+      description: 'بطاقات للشكر والامتنان والتقدير للأفراد والجهات',
       icon: '💐',
       count: 20,
       href: '/cards/appreciation',
     },
     {
       title: 'مناسبات عامة',
-      description: 'بطاقات متنوعة لجميع المناسبات',
+      description: 'بطاقات متنوعة لمختلف المناسبات الاجتماعية والخاصة',
       icon: '🎁',
       count: 30,
       href: '/cards/general',
@@ -51,32 +60,32 @@ export default function HomePage() {
   ];
 
   const stats = [
-    { icon: Heart, value: '50,000+', label: 'بطاقة مرسلة' },
-    { icon: Users, value: '25,000+', label: 'مستخدم نشط' },
-    { icon: Gift, value: '2,000,000+', label: 'دينار بحريني تبرعات' },
-    { icon: TrendingUp, value: '98%', label: 'نسبة الرضا' },
+    { icon: Heart, value: 'آلاف+', label: 'البطاقات الخيرية المرسلة' },
+    { icon: Users, value: 'آلاف+', label: 'المستفيدين والمتبرعين' },
+    { icon: Gift, value: 'مبالغ كبيرة', label: 'تم توجيهها لمشاريع خيرية' },
+    { icon: TrendingUp, value: 'رضا عالٍ', label: 'عن تجربة الإهداء والتبرع' },
   ];
 
   const features = [
     {
       icon: Sparkles,
-      title: 'تصاميم مميزة',
-      description: 'مجموعة واسعة من التصاميم الاحترافية لكل مناسبة',
+      title: 'تصاميم بعناية',
+      description: 'بطاقات أنيقة ومصممة باحتراف لتناسب هوية المؤسسة وروح المناسبة.',
     },
     {
       icon: Heart,
-      title: 'تبرع خيري',
-      description: 'قيمة البطاقة تتحول إلى تبرع لمشاريع المؤسسة الإنسانية',
+      title: 'أثر خيري مضاعف',
+      description: 'كل بطاقة تهنئة أو تعزية تتحول إلى تبرع يدعم برامج المؤسسة الإنسانية.',
     },
     {
       icon: Clock,
-      title: 'إرسال فوري',
-      description: 'استلام البطاقة فوراً عبر البريد الإلكتروني أو الرسائل',
+      title: 'إرسال فوري وسهل',
+      description: 'إنشاء البطاقة وإرسالها يتم في دقائق قليلة إلى المستلم عبر القنوات المتاحة.',
     },
     {
       icon: Shield,
-      title: 'آمن وموثوق',
-      description: 'عمليات دفع آمنة ومعتمدة من المؤسسة الملكية',
+      title: 'موثوقية وأمان',
+      description: 'عمليات الدفع والتبرع تتم عبر قنوات معتمدة وتحت إشراف المؤسسة الملكية للأعمال الإنسانية.',
     },
   ];
 
@@ -92,19 +101,23 @@ export default function HomePage() {
               {/* Text Content */}
               <div className="space-y-6 text-center lg:text-right animate-fade-in">
                 <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm">
-                  <span className="w-2 h-2 bg-maroon rounded-full animate-pulse"></span>
-                  <span className="text-sm font-medium text-maroon">منصة البطاقات الخيرية الرقمية</span>
+                  <span className="w-2 h-2 bg-maroon rounded-full animate-pulse" />
+                  <span className="text-sm font-medium text-maroon">
+                    منصة البطاقات الخيرية الرقمية من المؤسسة الملكية للأعمال الإنسانية
+                  </span>
                 </div>
-                
+
                 <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-dark leading-tight">
                   أرسل{' '}
                   <span className="text-gradient-maroon">بطاقة خير</span>
                   <br />
-                  واصنع الفرق
+                  واصنع الأثر الجميل
                 </h1>
-                
+
                 <p className="text-lg md:text-xl text-gray leading-relaxed max-w-2xl mx-auto lg:mx-0">
-                  عبّر عن مشاعرك في المناسبات السعيدة والحزينة، وساهم في دعم المشاريع الإنسانية من خلال بطاقاتنا الرقمية الخيرية
+                  شارك مشاعرك في الأفراح والأحزان برسالة راقية، واجعل كل بطاقة تهنئة
+                  أو تعزية سببًا في دعم الأيتام والأسر المحتاجة عبر برامج المؤسسة
+                  الملكية للأعمال الإنسانية.
                 </p>
 
                 <div className="flex flex-col sm:flex-row items-center justify-center lg:justify-start gap-4">
@@ -121,14 +134,14 @@ export default function HomePage() {
               {/* Hero Image/Illustration */}
               <div className="relative animate-fade-in">
                 <div className="relative aspect-square max-w-lg mx-auto">
-                  <div className="absolute inset-0 bg-gradient-to-br from-maroon/20 to-gold/20 rounded-3xl blur-3xl"></div>
+                  <div className="absolute inset-0 bg-gradient-to-br from-maroon/20 to-gold/20 rounded-3xl blur-3xl" />
                   <div className="relative bg-white rounded-3xl shadow-xl p-8 border border-gray-lighter">
                     <div className="aspect-card bg-gradient-to-br from-maroon to-maroon-dark rounded-2xl flex items-center justify-center">
                       <Heart className="w-24 h-24 text-white" fill="currentColor" />
                     </div>
                     <div className="mt-6 text-center">
                       <div className="text-2xl font-bold text-gray-dark mb-2">بطاقة خير</div>
-                      <div className="text-gray">لكل مناسبة معنى</div>
+                      <div className="text-gray">كلمة طيبة وأجر مستمر</div>
                     </div>
                   </div>
                 </div>
@@ -142,11 +155,17 @@ export default function HomePage() {
           <div className="container-custom">
             <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
               {stats.map((stat, index) => (
-                <div key={index} className="text-center animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <div
+                  key={index}
+                  className="text-center animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
                   <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-maroon to-maroon-dark rounded-2xl mb-4 shadow-maroon">
                     <stat.icon className="w-8 h-8 text-white" />
                   </div>
-                  <div className="text-3xl md:text-4xl font-bold text-maroon mb-2">{stat.value}</div>
+                  <div className="text-3xl md:text-4xl font-bold text-maroon mb-2">
+                    {stat.value}
+                  </div>
                   <div className="text-gray text-sm md:text-base">{stat.label}</div>
                 </div>
               ))}
@@ -159,16 +178,20 @@ export default function HomePage() {
           <div className="container-custom">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-4">
-                اختر المناسبة المناسبة
+                اختر المناسبة التي تعبر عن رسالتك
               </h2>
               <p className="text-lg text-gray max-w-2xl mx-auto">
-                نوفر لك مجموعة واسعة من البطاقات المصممة خصيصاً لكل مناسبة
+                صممنا بطاقات خاصة لمختلف المناسبات لتصل رسالتك بلغة راقية وبأثر خيري دائم.
               </p>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {occasions.map((occasion, index) => (
-                <div key={index} className="animate-fade-in" style={{ animationDelay: `${index * 100}ms` }}>
+                <div
+                  key={index}
+                  className="animate-fade-in"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
                   <OccasionCard {...occasion} />
                 </div>
               ))}
@@ -190,7 +213,7 @@ export default function HomePage() {
                 لماذا تختار منصة بطاقات الخير؟
               </h2>
               <p className="text-lg text-gray max-w-2xl mx-auto">
-                نجمع بين الإبداع والإنسانية في تجربة فريدة
+                تجربة متكاملة تجمع بين جمال التصميم وصدق الرسالة وأثر التبرع.
               </p>
             </div>
 
@@ -217,21 +240,41 @@ export default function HomePage() {
           <div className="container-custom">
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-bold text-gray-dark mb-4">
-                كيف يعمل؟
+                كيف تعمل المنصة؟
               </h2>
               <p className="text-lg text-gray max-w-2xl mx-auto">
-                أربع خطوات بسيطة لإرسال بطاقة خير
+                أربع خطوات بسيطة تجعل من رسالتك تحية جميلة وتبرعًا يصل لمستحقيه.
               </p>
             </div>
 
             <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
               {[
-                { step: '1', title: 'اختر المناسبة', description: 'تصفح المناسبات واختر البطاقة المناسبة' },
-                { step: '2', title: 'خصص البطاقة', description: 'أضف رسالتك الشخصية واختر التصميم' },
-                { step: '3', title: 'أتمم الدفع', description: 'ادفع بأمان وساهم في مشاريع خيرية' },
-                { step: '4', title: 'أرسل البطاقة', description: 'سيتم إرسال البطاقة فوراً للمستلم' },
+                {
+                  step: '1',
+                  title: 'اختر المناسبة',
+                  description: 'تصفح المناسبات المتاحة واختر البطاقة الأقرب لرسالتك.',
+                },
+                {
+                  step: '2',
+                  title: 'خصص البطاقة',
+                  description: 'اكتب رسالتك، واختر التصميم المناسب وطريقة الإرسال.',
+                },
+                {
+                  step: '3',
+                  title: 'أتمم التبرع',
+                  description: 'قم بالدفع بأمان، وتُوجَّه قيمة البطاقة لمشاريع المؤسسة.',
+                },
+                {
+                  step: '4',
+                  title: 'أرسل البطاقة',
+                  description: 'تصل البطاقة بشكل فوري للمستلم عبر القنوات المتاحة.',
+                },
               ].map((item, index) => (
-                <div key={index} className="relative animate-fade-in" style={{ animationDelay: `${index * 150}ms` }}>
+                <div
+                  key={index}
+                  className="relative animate-fade-in"
+                  style={{ animationDelay: `${index * 150}ms` }}
+                >
                   <div className="bg-white rounded-xl p-6 shadow-md hover:shadow-lg transition-shadow duration-base">
                     <div className="w-12 h-12 bg-gradient-to-br from-maroon to-maroon-dark rounded-xl flex items-center justify-center text-white font-bold text-xl mb-4 shadow-maroon">
                       {item.step}
@@ -240,7 +283,7 @@ export default function HomePage() {
                     <p className="text-gray text-sm leading-relaxed">{item.description}</p>
                   </div>
                   {index < 3 && (
-                    <div className="hidden lg:block absolute top-1/2 left-[-2rem] w-8 h-0.5 bg-gradient-to-l from-maroon/20 to-transparent"></div>
+                    <div className="hidden lg:block absolute top-1/2 left-[-2rem] w-8 h-0.5 bg-gradient-to-l from-maroon/20 to-transparent" />
                   )}
                 </div>
               ))}
@@ -256,10 +299,14 @@ export default function HomePage() {
                 ابدأ رحلتك الخيرية اليوم
               </h2>
               <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-                انضم لآلاف المستخدمين الذين يصنعون الفرق من خلال بطاقات الخير
+                كن جزءًا من قصة خير، واجعل رسائلك الودية وسيلة لدعم من هم في حاجة إلى العون
+                والرعاية.
               </p>
               <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
-                <Link href="/cards/all" className="btn-secondary w-full sm:w-auto text-lg px-12 py-4">
+                <Link
+                  href="/cards/all"
+                  className="btn-secondary w-full sm:w-auto text-lg px-12 py-4"
+                >
                   أرسل بطاقتك الأولى
                   <ArrowLeft className="w-5 h-5 mr-2" />
                 </Link>
