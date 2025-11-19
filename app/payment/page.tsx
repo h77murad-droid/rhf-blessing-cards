@@ -20,8 +20,8 @@ export default function PaymentPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // In production, process payment through payment gateway
-    // Simulate successful payment
+    // في بيئة الإنتاج يتم الربط مع بوابة دفع حقيقية
+    // هنا نحاكي عملية دفع ناجحة
     const orderId = Math.random().toString(36).substring(7);
     router.push(`/delivered/${orderId}`);
   };
@@ -43,15 +43,18 @@ export default function PaymentPage() {
           <div className="container-custom text-center">
             <div className="inline-flex items-center gap-2 px-4 py-2 bg-white rounded-full shadow-sm mb-4">
               <Shield className="w-5 h-5 text-success" />
-              <span className="text-sm font-medium text-success">عملية دفع آمنة ومشفرة</span>
+              <span className="text-sm font-medium text-success">
+                عملية دفع آمنة ومشفرة
+              </span>
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl font-bold text-gray-dark mb-4">
               إتمام{' '}
-              <span className="text-gradient-maroon">التبرع</span>
+              <span className="text-gradient-maroon">التبرع وإرسال البطاقة</span>
             </h1>
             <p className="text-lg text-gray max-w-2xl mx-auto">
-              أكمل عملية الدفع لإرسال بطاقة الخير
+              الرجاء إكمال بيانات الدفع لإتمام تبرعك وإرسال بطاقة الخير عن طريق
+              المنصة التابعة للمؤسسة الملكية للأعمال الإنسانية.
             </p>
           </div>
         </section>
@@ -70,7 +73,9 @@ export default function PaymentPage() {
 
                   {/* Payment Method Selection */}
                   <div className="mb-8">
-                    <label className="block text-gray font-medium mb-4">اختر طريقة الدفع</label>
+                    <label className="block text-gray font-medium mb-4">
+                      اختر طريقة الدفع
+                    </label>
                     <div className="grid sm:grid-cols-3 gap-4">
                       <button
                         type="button"
@@ -82,7 +87,9 @@ export default function PaymentPage() {
                         }`}
                       >
                         <CreditCard className="w-8 h-8 mx-auto mb-2 text-maroon" />
-                        <div className="text-sm font-medium text-gray-dark">بطاقة ائتمان</div>
+                        <div className="text-sm font-medium text-gray-dark">
+                          بطاقة ائتمان / خصم
+                        </div>
                       </button>
 
                       <button
@@ -94,8 +101,12 @@ export default function PaymentPage() {
                             : 'border-gray-lighter hover:border-gray-light'
                         }`}
                       >
-                        <div className="w-8 h-8 mx-auto mb-2 text-maroon font-bold text-lg">B</div>
-                        <div className="text-sm font-medium text-gray-dark">Benefit</div>
+                        <div className="w-8 h-8 mx-auto mb-2 text-maroon font-bold text-lg">
+                          B
+                        </div>
+                        <div className="text-sm font-medium text-gray-dark">
+                          BenefitPay
+                        </div>
                       </button>
 
                       <button
@@ -107,8 +118,19 @@ export default function PaymentPage() {
                             : 'border-gray-lighter hover:border-gray-light'
                         }`}
                       >
-                        <div className="w-8 h-8 mx-auto mb-2 text-maroon font-bold">🍎</div>
-                        <div className="text-sm font-medium text-gray-dark">Apple Pay</div>
+                        <div className="w-10 h-10 mx-auto mb-2 flex items-center justify-center">
+  <svg
+    viewBox="0 0 100 100"
+    className="w-10 h-10 fill-current text-maroon"
+  >
+    <path d="M85.3 32.6c-2.3 1-4.8 1.6-7.4 1.9 2.7-1.6 4.7-4.1 5.7-7.2-2.5 1.5-5.2 2.5-8.1 3.1-2.4-2.5-5.9-4-9.7-4-7.3 0-13.2 5.9-13.2 13.2 0 1 .1 2 .3 3-11-0.5-20.8-5.8-27.3-13.7-1.2 2-1.8 4.2-1.8 6.6 0 4.6 2.3 8.6 5.9 10.9-2.1-0.1-4.1-0.6-5.8-1.6v0.2c0 6.4 4.5 11.8 10.5 13-1.1 0.3-2.4 0.4-3.6 0.4-0.9 0-1.7-0.1-2.6-0.2 1.7 5.3 6.6 9.2 12.4 9.3-4.5 3.5-10.3 5.6-16.6 5.6-1.1 0-2.2-0.1-3.3-0.2 5.9 3.8 12.9 6 20.4 6 24.5 0 37.9-20.3 37.9-37.9 0-0.6 0-1.1 0-1.7 2.6-1.9 4.8-4.3 6.6-7z"/>
+    <text x="0" y="95" fontSize="40" fontWeight="bold">Pay</text>
+  </svg>
+</div>
+
+                        <div className="text-sm font-medium text-gray-dark">
+                          Apple Pay
+                        </div>
                       </button>
                     </div>
                   </div>
@@ -118,7 +140,10 @@ export default function PaymentPage() {
                     {paymentMethod === 'credit-card' && (
                       <>
                         <div>
-                          <label htmlFor="cardNumber" className="block text-gray font-medium mb-2">
+                          <label
+                            htmlFor="cardNumber"
+                            className="block text-gray font-medium mb-2"
+                          >
                             رقم البطاقة *
                           </label>
                           <input
@@ -135,7 +160,10 @@ export default function PaymentPage() {
                         </div>
 
                         <div>
-                          <label htmlFor="cardName" className="block text-gray font-medium mb-2">
+                          <label
+                            htmlFor="cardName"
+                            className="block text-gray font-medium mb-2"
+                          >
                             اسم حامل البطاقة *
                           </label>
                           <input
@@ -152,7 +180,10 @@ export default function PaymentPage() {
 
                         <div className="grid sm:grid-cols-2 gap-4">
                           <div>
-                            <label htmlFor="expiryDate" className="block text-gray font-medium mb-2">
+                            <label
+                              htmlFor="expiryDate"
+                              className="block text-gray font-medium mb-2"
+                            >
                               تاريخ الانتهاء *
                             </label>
                             <input
@@ -169,7 +200,10 @@ export default function PaymentPage() {
                           </div>
 
                           <div>
-                            <label htmlFor="cvv" className="block text-gray font-medium mb-2">
+                            <label
+                              htmlFor="cvv"
+                              className="block text-gray font-medium mb-2"
+                            >
                               CVV *
                             </label>
                             <input
@@ -190,11 +224,16 @@ export default function PaymentPage() {
 
                     {/* Contact Information */}
                     <div className="pt-6 border-t border-gray-lighter">
-                      <h3 className="text-lg font-bold text-gray-dark mb-4">معلومات الاتصال</h3>
-                      
+                      <h3 className="text-lg font-bold text-gray-dark mb-4">
+                        معلومات التواصل لإرسال البطاقة
+                      </h3>
+
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <label htmlFor="email" className="block text-gray font-medium mb-2">
+                          <label
+                            htmlFor="email"
+                            className="block text-gray font-medium mb-2"
+                          >
                             البريد الإلكتروني *
                           </label>
                           <input
@@ -204,13 +243,16 @@ export default function PaymentPage() {
                             value={formData.email}
                             onChange={handleChange}
                             required
-                            placeholder="your@email.com"
+                            placeholder="example@domain.com"
                             className="input-field"
                           />
                         </div>
 
                         <div>
-                          <label htmlFor="phone" className="block text-gray font-medium mb-2">
+                          <label
+                            htmlFor="phone"
+                            className="block text-gray font-medium mb-2"
+                          >
                             رقم الهاتف *
                           </label>
                           <input
@@ -231,7 +273,8 @@ export default function PaymentPage() {
                     <div className="flex items-start gap-3 p-4 bg-beige rounded-lg">
                       <Lock className="w-5 h-5 text-maroon flex-shrink-0 mt-0.5" />
                       <p className="text-sm text-gray">
-                        جميع المعاملات مؤمنة بتشفير SSL. نحن لا نقوم بتخزين معلومات البطاقة الائتمانية.
+                        تتم معالجة المدفوعات عبر بوابات دفع معتمدة وباستخدام تشفير SSL.
+                        لا يتم تخزين بيانات البطاقة الائتمانية في أنظمة المنصة.
                       </p>
                     </div>
 
@@ -244,11 +287,8 @@ export default function PaymentPage() {
                       >
                         العودة
                       </button>
-                      <button
-                        type="submit"
-                        className="btn-primary flex-1"
-                      >
-                        إتمام الدفع (10 د.ب)
+                      <button type="submit" className="btn-primary flex-1">
+                        إتمام الدفع بمبلغ 10 د.ب
                         <ArrowLeft className="w-5 h-5 mr-2" />
                       </button>
                     </div>
@@ -260,23 +300,33 @@ export default function PaymentPage() {
               <div className="lg:col-span-1">
                 <div className="sticky top-24">
                   <div className="bg-beige rounded-2xl p-6 shadow-md">
-                    <h3 className="text-xl font-bold text-gray-dark mb-6">ملخص الطلب</h3>
-                    
+                    <h3 className="text-xl font-bold text-gray-dark mb-6">
+                      ملخص الطلب
+                    </h3>
+
                     <div className="space-y-4 mb-6">
                       <div className="flex items-center justify-between">
-                        <span className="text-gray">البطاقة:</span>
-                        <span className="font-medium text-gray-dark">بطاقة خير</span>
+                        <span className="text-gray">نوع البطاقة:</span>
+                        <span className="font-medium text-gray-dark">
+                          بطاقة خير رقمية
+                        </span>
                       </div>
-                      
+
                       <div className="flex items-center justify-between">
                         <span className="text-gray">المناسبة:</span>
-                        <span className="font-medium text-gray-dark">الأفراح</span>
+                        <span className="font-medium text-gray-dark">
+                          مناسبة أفراح
+                        </span>
                       </div>
 
                       <div className="border-t border-gray-lighter pt-4">
                         <div className="flex items-center justify-between text-lg">
-                          <span className="font-bold text-gray-dark">المجموع:</span>
-                          <span className="font-bold text-maroon text-2xl">10 د.ب</span>
+                          <span className="font-bold text-gray-dark">
+                            إجمالي التبرع:
+                          </span>
+                          <span className="font-bold text-maroon text-2xl">
+                            10 د.ب
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -285,9 +335,12 @@ export default function PaymentPage() {
                       <div className="flex items-start gap-2 mb-2">
                         <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
                         <div>
-                          <p className="font-medium text-gray-dark text-sm mb-1">تبرع خيري</p>
+                          <p className="font-medium text-gray-dark text-sm mb-1">
+                            تبرع خيري عبر المؤسسة الملكية للأعمال الإنسانية
+                          </p>
                           <p className="text-xs text-gray leading-relaxed">
-                            كامل المبلغ سيذهب لدعم المشاريع الإنسانية لمؤسسة البحرين الملكية
+                            يتم توجيه قيمة البطاقة لدعم البرامج والمشاريع الإنسانية التي
+                            تشرف عليها المؤسسة لصالح الأيتام والأسر المحتاجة.
                           </p>
                         </div>
                       </div>
@@ -298,15 +351,15 @@ export default function PaymentPage() {
                   <div className="mt-6 grid grid-cols-3 gap-4">
                     <div className="bg-white rounded-lg p-3 text-center shadow-sm border border-gray-lighter">
                       <Shield className="w-6 h-6 mx-auto mb-1 text-success" />
-                      <p className="text-xs text-gray">آمن</p>
+                      <p className="text-xs text-gray">دفع آمن</p>
                     </div>
                     <div className="bg-white rounded-lg p-3 text-center shadow-sm border border-gray-lighter">
                       <Lock className="w-6 h-6 mx-auto mb-1 text-maroon" />
-                      <p className="text-xs text-gray">مشفر</p>
+                      <p className="text-xs text-gray">بيانات مشفرة</p>
                     </div>
                     <div className="bg-white rounded-lg p-3 text-center shadow-sm border border-gray-lighter">
                       <CheckCircle className="w-6 h-6 mx-auto mb-1 text-success" />
-                      <p className="text-xs text-gray">موثوق</p>
+                      <p className="text-xs text-gray">جهة موثوقة</p>
                     </div>
                   </div>
                 </div>
