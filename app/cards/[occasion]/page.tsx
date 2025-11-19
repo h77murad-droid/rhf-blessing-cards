@@ -6,11 +6,42 @@ import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CardItem from '@/components/CardItem';
 
-export default function CardsGalleryPage({ params }: { params: { occasion: string } }) {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedFilter, setSelectedFilter] = useState('all');
+type OccasionSlug =
+  | 'all'
+  | 'celebrations'
+  | 'religious'
+  | 'social'
+  | 'condolences'
+  | 'appreciation'
+  | 'general';
 
-  // Mock data - in production this would come from API/database
+export default function CardsGalleryPage({
+  params,
+}: {
+  params: { occasion: string };
+}) {
+  // نحدد الفلتر المبدئي من عنوان الرابط
+  const getInitialFilter = (slug: string): OccasionSlug => {
+    switch (slug) {
+      case 'celebrations':
+      case 'religious':
+      case 'social':
+      case 'condolences':
+      case 'appreciation':
+      case 'general':
+        return slug;
+      case 'all':
+      default:
+        return 'all';
+    }
+  };
+
+  const [searchQuery, setSearchQuery] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState<OccasionSlug>(
+    getInitialFilter(params.occasion),
+  );
+
+  // بيانات تجريبية – مستقبلاً تستبدل ببيانات من قاعدة البيانات / API
   const allCards = [
     { id: '1', title: 'بطاقة زفاف مباركة', occasion: 'الأفراح', price: 10 },
     { id: '2', title: 'تهنئة مولود جديد', occasion: 'الأفراح', price: 8 },
@@ -30,27 +61,33 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
     { id: '16', title: 'شفاك الله', occasion: 'عامة', price: 5 },
   ];
 
-  const filters = [
+  const filters: { id: OccasionSlug; label: string }[] = [
     { id: 'all', label: 'الكل' },
-    { id: 'celebrations', label: 'الأفراح' },
-    { id: 'religious', label: 'دينية' },
-    { id: 'social', label: 'اجتماعية' },
-    { id: 'condolences', label: 'تعازي' },
-    { id: 'appreciation', label: 'شكر' },
-    { id: 'general', label: 'عامة' },
+    { id: 'celebrations', label: 'مناسبات الأفراح' },
+    { id: 'religious', label: 'المناسبات الدينية' },
+    { id: 'social', label: 'النجاح والإنجاز' },
+    { id: 'condolences', label: 'التعازي والمواساة' },
+    { id: 'appreciation', label: 'الشكر والتقدير' },
+    { id: 'general', label: 'مناسبات عامة' },
   ];
 
-  const filteredCards = allCards.filter(card => {
+  const filteredCards = allCards.filter((card) => {
     const matchesSearch = card.title.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = selectedFilter === 'all' || 
+    const matchesFilter =
+      selectedFilter === 'all' ||
       (selectedFilter === 'celebrations' && card.occasion === 'الأفراح') ||
       (selectedFilter === 'religious' && card.occasion === 'دينية') ||
       (selectedFilter === 'social' && card.occasion === 'اجتماعية') ||
       (selectedFilter === 'condolences' && card.occasion === 'تعازي') ||
       (selectedFilter === 'appreciation' && card.occasion === 'شكر') ||
       (selectedFilter === 'general' && card.occasion === 'عامة');
+
     return matchesSearch && matchesFilter;
   });
+
+  // عنوان تفاعلي حسب الفلتر الحالي
+  const currentFilterLabel =
+    filters.find((f) => f.id === selectedFilter)?.label || 'جميع البطاقات';
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -62,10 +99,14 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
           <div className="container-custom text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-dark mb-4">
               معرض{' '}
-              <span className="text-gradient-maroon">البطاقات</span>
+              <span className="text-gradient-maroon">بطاقات الخير</span>
             </h1>
             <p className="text-lg text-gray max-w-2xl mx-auto">
-              اختر من بين مئات التصاميم المميزة لجميع المناسبات
+              تصفح البطاقات الرقمية الخيرية المصممة لمختلف المناسبات، واختر البطاقة
+              التي تعبر عن رسالتك وتحقق أثرًا إنسانيًا في الوقت نفسه.
+            </p>
+            <p className="mt-3 text-sm text-gray-light">
+              العرض الحالي: <span className="font-medium text-maroon">{currentFilterLabel}</span>
             </p>
           </div>
         </section>
@@ -79,7 +120,7 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
                 <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-light w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="ابحث عن بطاقة..."
+                  placeholder="ابحث باسم البطاقة أو المناسبة..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="input-field pr-12"
@@ -113,7 +154,9 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
             {/* Results Count */}
             <div className="mb-6">
               <p className="text-gray">
-                <span className="font-bold text-maroon">{filteredCards.length}</span> بطاقة متاحة
+                تم العثور على{' '}
+                <span className="font-bold text-maroon">{filteredCards.length}</span>{' '}
+                بطاقة تطابق معايير البحث.
               </p>
             </div>
 
@@ -121,7 +164,11 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
             {filteredCards.length > 0 ? (
               <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
                 {filteredCards.map((card, index) => (
-                  <div key={card.id} className="animate-fade-in" style={{ animationDelay: `${index * 30}ms` }}>
+                  <div
+                    key={card.id}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 30}ms` }}
+                  >
                     <CardItem {...card} />
                   </div>
                 ))}
@@ -131,8 +178,10 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
                 <div className="w-24 h-24 bg-beige rounded-full flex items-center justify-center mx-auto mb-6">
                   <Search className="w-12 h-12 text-gray-light" />
                 </div>
-                <h3 className="text-2xl font-bold text-gray-dark mb-2">لا توجد نتائج</h3>
-                <p className="text-gray">جرّب تغيير كلمات البحث أو الفلاتر</p>
+                <h3 className="text-2xl font-bold text-gray-dark mb-2">لا توجد نتائج مطابقة</h3>
+                <p className="text-gray">
+                  جرّب تعديل كلمات البحث أو تغيير الفلاتر للاطلاع على بطاقات أخرى.
+                </p>
               </div>
             )}
           </div>
@@ -143,10 +192,11 @@ export default function CardsGalleryPage({ params }: { params: { occasion: strin
           <div className="container-custom">
             <div className="bg-gradient-to-br from-maroon to-maroon-dark rounded-2xl p-12 text-center text-white shadow-xl">
               <h2 className="text-3xl md:text-4xl font-bold mb-4">
-                لم تجد البطاقة المناسبة؟
+                لم تجد البطاقة التي في بالك؟
               </h2>
               <p className="text-lg mb-8 text-white/90">
-                نضيف تصاميم جديدة بشكل مستمر. تابعنا للحصول على آخر التحديثات
+                نعمل على إضافة تصاميم جديدة لبطاقات الخير بشكل مستمر. اشترك في النشرة
+                البريدية ليصلك كل جديد من المنصة التابعة للمؤسسة الملكية للأعمال الإنسانية.
               </p>
               <button className="btn-secondary">
                 اشترك في النشرة البريدية
