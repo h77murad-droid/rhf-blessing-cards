@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ArrowLeft } from 'lucide-react';
 
 interface OccasionCardProps {
   title: string;
@@ -21,17 +22,24 @@ export default function OccasionCard({ title, description, icon, count, href }: 
         <h3 className="text-xl font-bold text-gray-dark mb-2 group-hover:text-maroon transition-colors duration-base">
           {title}
         </h3>
+
         <p className="text-gray text-sm mb-4 leading-relaxed">
           {description}
         </p>
 
-        {/* Badge */}
+        {/* Footer row */}
         <div className="flex items-center justify-between">
-          <span className="badge badge-primary">
-            {count} بطاقة متاحة
-          </span>
-          <span className="text-maroon text-sm font-medium group-hover:translate-x-[-4px] transition-transform duration-base">
-            تصفح ←
+          {count > 0 ? (
+            <span className="badge badge-primary">
+              {count} بطاقة متاحة
+            </span>
+          ) : (
+            <span className="badge badge-secondary">قريباً</span>
+          )}
+
+          <span className="flex items-center gap-1 text-maroon text-sm font-medium group-hover:translate-x-[-4px] transition-transform duration-base">
+            تصفح
+            <ArrowLeft className="w-4 h-4" />
           </span>
         </div>
       </div>
