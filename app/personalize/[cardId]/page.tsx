@@ -8,10 +8,14 @@ import Footer from '@/components/Footer';
 
 export default function PersonalizePage({ params }: { params: { cardId: string } }) {
   const router = useRouter();
+
+  // نموذج البيانات الاساسي للبطاقة
   const [formData, setFormData] = useState({
     recipientName: '',
     recipientEmail: '',
+    recipientPhone: '',   // رقم واتساب المستلم
     senderName: '',
+    senderPhone: '',      // رقم واتساب المرسل
     message: '',
     fontStyle: 'Tajawal',
     cardColor: 'maroon',
@@ -19,12 +23,17 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // في بيئة الإنتاج: يتم حفظ بيانات البطاقة وربطها بالطلب قبل الانتقال لصفحة الدفع
+
+    // TODO: في النسخة الفعلية
+    // 1) حفظ بيانات البطاقة والمرسل والمستلم في قاعدة البيانات (Supabase)
+    // 2) تمرير البيانات لصفحة الدفع مع رقم الطلب
+    // 3) بعد نجاح الدفع، استدعاء API لإرسال رسالة واتساب للمستلم والمرسل
+
     router.push('/payment');
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>,
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     setFormData({
       ...formData,
@@ -42,11 +51,10 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
           <div className="container-custom text-center">
             <h1 className="text-4xl md:text-5xl font-bold text-gray-dark mb-4">
               خصص{' '}
-              <span className="text-gradient-maroon">بطاقة الخير</span>
+              <span className="text-gradient-maroon">بطاقتك</span>
             </h1>
             <p className="text-lg text-gray max-w-2xl mx-auto">
-              أضف اسم المستلم ورسالتك الخاصة ولمستك الجمالية قبل إرسال البطاقة
-              وتحويل قيمتها إلى تبرع خيري.
+              أضف لمستك الشخصية واجعل البطاقة مميزة تصل للمستلم عبر الواتساب في النسخة النهائية من النظام
             </p>
           </div>
         </section>
@@ -60,17 +68,15 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                 <div className="sticky top-24">
                   <h2 className="text-2xl font-bold text-gray-dark mb-6 flex items-center gap-3">
                     <Palette className="w-6 h-6 text-maroon" />
-                    معاينة بطاقة الخير
+                    معاينة البطاقة
                   </h2>
-
+                  
                   <div className="bg-gradient-to-br from-beige to-white rounded-2xl p-8 shadow-lg border-2 border-gray-lighter">
-                    <div
+                    <div 
                       className={`aspect-card rounded-xl shadow-xl overflow-hidden ${
-                        formData.cardColor === 'maroon'
-                          ? 'bg-gradient-to-br from-maroon to-maroon-dark'
-                          : formData.cardColor === 'gold'
-                          ? 'bg-gradient-to-br from-gold to-gold-dark'
-                          : 'bg-gradient-to-br from-gray to-gray-dark'
+                        formData.cardColor === 'maroon' ? 'bg-gradient-to-br from-maroon to-maroon-dark' :
+                        formData.cardColor === 'gold' ? 'bg-gradient-to-br from-gold to-gold-dark' :
+                        'bg-gradient-to-br from-gray to-gray-dark'
                       }`}
                     >
                       <div className="h-full flex flex-col items-center justify-center p-8 text-white text-center">
@@ -80,12 +86,10 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                         </h3>
                         <p
                           className={`text-lg leading-relaxed mb-6 ${
-                            formData.fontStyle === 'TajawalBold'
-                              ? 'font-bold'
-                              : 'font-normal'
+                            formData.fontStyle === 'Tajawal' ? 'font-sans' : ''
                           }`}
                         >
-                          {formData.message || 'رسالتك الشخصية ستظهر هنا بشكل جميل وواضح...'}
+                          {formData.message || 'رسالتك الشخصية ستظهر هنا...'}
                         </p>
                         <div className="mt-auto pt-6 border-t border-white/20 w-full">
                           <p className="text-sm">
@@ -100,10 +104,16 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                         <span className="text-gray">قيمة التبرع:</span>
                         <span className="text-2xl font-bold text-maroon">10 د.ب</span>
                       </div>
-                      <p className="mt-2 text-xs text-gray">
-                        سيتم توجيه هذا المبلغ لدعم البرامج والمشاريع الإنسانية التي
-                        تشرف عليها المؤسسة الملكية للأعمال الإنسانية.
-                      </p>
+                    </div>
+
+                    <div className="mt-4 p-3 bg-beige rounded-lg border border-gray-lighter text-xs text-gray">
+                      في النسخة الفعلية من النظام سيتم:
+                      <br />
+                      1. توليد صورة للبطاقة تحمل هذه البيانات
+                      <br />
+                      2. إرسالها تلقائيا عبر الواتساب للمستلم
+                      <br />
+                      3. إرسال إشعار تأكيد للمرسل عبر الواتساب أيضا
                     </div>
                   </div>
                 </div>
@@ -113,7 +123,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
               <div className="order-1 lg:order-2">
                 <h2 className="text-2xl font-bold text-gray-dark mb-6 flex items-center gap-3">
                   <Type className="w-6 h-6 text-maroon" />
-                  بيانات البطاقة والرسالة
+                  معلومات البطاقة
                 </h2>
 
                 <form onSubmit={handleSubmit} className="space-y-6">
@@ -123,13 +133,10 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       <User className="w-5 h-5 text-maroon" />
                       معلومات المستلم
                     </h3>
-
+                    
                     <div className="space-y-4">
                       <div>
-                        <label
-                          htmlFor="recipientName"
-                          className="block text-gray font-medium mb-2"
-                        >
+                        <label htmlFor="recipientName" className="block text-gray font-medium mb-2">
                           اسم المستلم *
                         </label>
                         <input
@@ -140,15 +147,12 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                           onChange={handleChange}
                           required
                           className="input-field"
-                          placeholder="اكتب اسم الشخص الذي سترسل له البطاقة"
+                          placeholder="أدخل اسم المستلم"
                         />
                       </div>
 
                       <div>
-                        <label
-                          htmlFor="recipientEmail"
-                          className="block text-gray font-medium mb-2"
-                        >
+                        <label htmlFor="recipientEmail" className="block text-gray font-medium mb-2">
                           البريد الإلكتروني للمستلم *
                         </label>
                         <input
@@ -161,9 +165,22 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                           className="input-field"
                           placeholder="example@email.com"
                         />
-                        <p className="mt-1 text-xs text-gray-light">
-                          سيتم إرسال رابط البطاقة إلى هذا البريد الإلكتروني.
-                        </p>
+                      </div>
+
+                      <div>
+                        <label htmlFor="recipientPhone" className="block text-gray font-medium mb-2">
+                          رقم الواتساب للمستلم *
+                        </label>
+                        <input
+                          type="tel"
+                          id="recipientPhone"
+                          name="recipientPhone"
+                          value={formData.recipientPhone}
+                          onChange={handleChange}
+                          required
+                          className="input-field"
+                          placeholder="+9735XXXXXXX"
+                        />
                       </div>
                     </div>
                   </div>
@@ -171,37 +188,52 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                   {/* Sender Info */}
                   <div className="bg-beige rounded-xl p-6">
                     <h3 className="font-bold text-gray-dark mb-4">معلومات المرسل</h3>
+                    
+                    <div className="space-y-4">
+                      <div>
+                        <label htmlFor="senderName" className="block text-gray font-medium mb-2">
+                          اسمك *
+                        </label>
+                        <input
+                          type="text"
+                          id="senderName"
+                          name="senderName"
+                          value={formData.senderName}
+                          onChange={handleChange}
+                          required
+                          className="input-field"
+                          placeholder="أدخل اسمك"
+                        />
+                      </div>
 
-                    <div>
-                      <label
-                        htmlFor="senderName"
-                        className="block text-gray font-medium mb-2"
-                      >
-                        اسمك *
-                      </label>
-                      <input
-                        type="text"
-                        id="senderName"
-                        name="senderName"
-                        value={formData.senderName}
-                        onChange={handleChange}
-                        required
-                        className="input-field"
-                        placeholder="أدخل اسمك كما تود ظهوره في البطاقة"
-                      />
+                      <div>
+                        <label htmlFor="senderPhone" className="block text-gray font-medium mb-2">
+                          رقم الواتساب للمرسل *
+                        </label>
+                        <input
+                          type="tel"
+                          id="senderPhone"
+                          name="senderPhone"
+                          value={formData.senderPhone}
+                          onChange={handleChange}
+                          required
+                          className="input-field"
+                          placeholder="+9733XXXXXXX"
+                        />
+                        <p className="text-xs text-gray-light mt-1">
+                          في النسخة النهائية سيتم إرسال تأكيد العملية ورابط البطاقة إلى هذا الرقم عبر الواتساب.
+                        </p>
+                      </div>
                     </div>
                   </div>
 
                   {/* Message */}
                   <div className="bg-beige rounded-xl p-6">
                     <h3 className="font-bold text-gray-dark mb-4">رسالتك الشخصية</h3>
-
+                    
                     <div>
-                      <label
-                        htmlFor="message"
-                        className="block text-gray font-medium mb-2"
-                      >
-                        نص الرسالة *
+                      <label htmlFor="message" className="block text-gray font-medium mb-2">
+                        الرسالة *
                       </label>
                       <textarea
                         id="message"
@@ -212,7 +244,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                         rows={6}
                         maxLength={500}
                         className="input-field resize-none"
-                        placeholder="اكتب كلماتك الخاصة، مثل تهنئة، دعاء، أو رسالة شكر..."
+                        placeholder="اكتب رسالتك الشخصية هنا..."
                       />
                       <div className="text-left mt-2">
                         <span className="text-sm text-gray-light">
@@ -224,15 +256,12 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
 
                   {/* Customization */}
                   <div className="bg-beige rounded-xl p-6">
-                    <h3 className="font-bold text-gray-dark mb-4">خيارات التخصيص</h3>
-
+                    <h3 className="font-bold text-gray-dark mb-4">التخصيص</h3>
+                    
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
-                        <label
-                          htmlFor="fontStyle"
-                          className="block text-gray font-medium mb-2"
-                        >
-                          نمط الخط في الرسالة
+                        <label htmlFor="fontStyle" className="block text-gray font-medium mb-2">
+                          نمط الخط
                         </label>
                         <select
                           id="fontStyle"
@@ -247,10 +276,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       </div>
 
                       <div>
-                        <label
-                          htmlFor="cardColor"
-                          className="block text-gray font-medium mb-2"
-                        >
+                        <label htmlFor="cardColor" className="block text-gray font-medium mb-2">
                           لون البطاقة
                         </label>
                         <select
@@ -260,9 +286,9 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                           onChange={handleChange}
                           className="input-field"
                         >
-                          <option value="maroon">عنابي (لون الهوية)</option>
+                          <option value="maroon">عنابي</option>
                           <option value="gold">ذهبي</option>
-                          <option value="gray">رمادي هادئ</option>
+                          <option value="gray">رمادي</option>
                         </select>
                       </div>
                     </div>
@@ -281,7 +307,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       type="submit"
                       className="btn-primary flex-1"
                     >
-                      متابعة لصفحة الدفع
+                      متابعة للدفع
                       <ArrowLeft className="w-5 h-5 mr-2" />
                     </button>
                   </div>
