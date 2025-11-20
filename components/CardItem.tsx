@@ -17,10 +17,11 @@ export default function CardItem({ id, title, occasion, price, image }: CardItem
       <div className="relative aspect-card bg-gradient-to-br from-beige to-white overflow-hidden rounded-xl">
         {image ? (
           <img
-            src={image}
-            alt={title}
-            className="w-full h-full object-cover"
-          />
+  src={`/cards/general/dua.png`}
+  alt={title}
+  className="w-full h-full object-cover"
+/>
+
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <Heart className="w-16 h-16 text-maroon/20" />
