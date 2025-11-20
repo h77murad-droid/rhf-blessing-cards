@@ -15,11 +15,26 @@ import {
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 
-export default function DeliveredPage({ params }: { params: { id: string } }) {
+export default function DeliveredPage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: { recipientWhatsapp?: string; senderWhatsapp?: string };
+}) {
   const [copied, setCopied] = useState(false);
 
-  // يمكن مستقبلاً استخدام الدومين الرسمي للمنصة
   const cardUrl = `https://rhf-cards.bh/view/${params.id}`;
+  const recipientWhatsapp = searchParams.recipientWhatsapp || '';
+  const senderWhatsapp = searchParams.senderWhatsapp || '';
+  const supportWhatsapp = '+97317000000'; // تقدر تغيره لاحقاً لرقم الدعم الرسمي
+
+  const normalizePhoneForWa = (phone: string) => phone.replace(/\D/g, '');
+
+  const buildWhatsappLink = (phone: string | null, text: string) => {
+    const base = phone && phone.trim() !== '' ? `https://wa.me/${normalizePhoneForWa(phone)}` : 'https://wa.me/';
+    return `${base}?text=${encodeURIComponent(text)}`;
+  };
 
   const handleCopy = () => {
     navigator.clipboard.writeText(cardUrl);
@@ -27,9 +42,8 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
     setTimeout(() => setCopied(false), 2000);
   };
 
-  const handleShare = (platform: string) => {
-    const text =
-      'تم إرسال بطاقة خير لك عبر منصة بطاقات الخير التابعة للمؤسسة الملكية للأعمال الإنسانية (RHF).';
+  const handleShareGeneric = (platform: string) => {
+    const text = 'تم إرسال بطاقة خير لك من منصة بطاقات الخير - RHF';
     let shareUrl = '';
 
     switch (platform) {
@@ -37,16 +51,16 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
         shareUrl = `https://wa.me/?text=${encodeURIComponent(text + ' ' + cardUrl)}`;
         break;
       case 'email':
-        shareUrl = `mailto:?subject=${encodeURIComponent(
-          'بطاقة خير من المؤسسة الملكية للأعمال الإنسانية',
-        )}&body=${encodeURIComponent(text + ' ' + cardUrl)}`;
+        shareUrl = `mailto:?subject=${encodeURIComponent('بطاقة خير')}&body=${encodeURIComponent(
+          text + ' ' + cardUrl
+        )}`;
         break;
       case 'facebook':
         shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(cardUrl)}`;
         break;
       case 'twitter':
         shareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-          text,
+          text
         )}&url=${encodeURIComponent(cardUrl)}`;
         break;
     }
@@ -54,6 +68,24 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
     if (shareUrl) {
       window.open(shareUrl, '_blank', 'width=600,height=400');
     }
+  };
+
+  const handleSendToRecipient = () => {
+    const text = `تم تصميم بطاقة خير خاصة لك عبر منصة بطاقات الخير من المؤسسة الملكية للأعمال الإنسانية.\n\nرابط البطاقة:\n${cardUrl}`;
+    const url = buildWhatsappLink(recipientWhatsapp || null, text);
+    window.open(url, '_blank');
+  };
+
+  const handleSendConfirmationToSender = () => {
+    const text = `شكراً لمساهمتك.\n\nتم تأكيد إرسال بطاقة الخير عبر منصة بطاقات الخير.\nرقم الطلب: ${params.id.toUpperCase()}\nرابط البطاقة:\n${cardUrl}`;
+    const url = buildWhatsappLink(senderWhatsapp || null, text);
+    window.open(url, '_blank');
+  };
+
+  const handleContactSupport = () => {
+    const text = `مرحباً، أحتاج مساعدة بخصوص بطاقة الخير.\nرقم الطلب: ${params.id.toUpperCase()}`;
+    const url = buildWhatsappLink(supportWhatsapp, text);
+    window.open(url, '_blank');
   };
 
   return (
@@ -77,9 +109,7 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
                 </h1>
 
                 <p className="text-lg text-gray leading-relaxed max-w-2xl mx-auto">
-                  شكراً لمبادرتك الكريمة. تم إرسال بطاقة الخير بنجاح، وسيُوجَّه تبرعك
-                  لدعم البرامج والمشاريع الإنسانية التي تشرف عليها المؤسسة الملكية للأعمال
-                  الإنسانية.
+                  شكراً لك. تم إرسال بطاقة الخير بنجاح وتبرعك سيساهم في دعم المشاريع الإنسانية.
                 </p>
               </div>
 
@@ -88,31 +118,23 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
                 <div className="grid md:grid-cols-2 gap-8">
                   {/* Left Side - Card Preview */}
                   <div>
-                    <h2 className="text-xl font-bold text-gray-dark mb-4">
-                      بطاقتك المرسلة
-                    </h2>
+                    <h2 className="text-xl font-bold text-gray-dark mb-4">بطاقتك</h2>
                     <div className="aspect-card bg-gradient-to-br from-maroon to-maroon-dark rounded-xl shadow-xl overflow-hidden">
                       <div className="h-full flex flex-col items-center justify-center p-6 text-white text-center">
                         <Heart className="w-16 h-16 mb-4" fill="currentColor" />
                         <h3 className="text-2xl font-bold mb-3">بطاقة خير</h3>
-                        <p className="text-sm leading-relaxed">
-                          تم إرسال رسالتك الودية في قالب أنيق يحمل أثراً خيرياً مستمراً.
-                        </p>
+                        <p className="text-sm leading-relaxed">رسالتك الشخصية المميزة</p>
                       </div>
                     </div>
                   </div>
 
                   {/* Right Side - Details */}
                   <div>
-                    <h2 className="text-xl font-bold text-gray-dark mb-4">
-                      تفاصيل الطلب
-                    </h2>
+                    <h2 className="text-xl font-bold text-gray-dark mb-4">تفاصيل الطلب</h2>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between p-3 bg-beige rounded-lg">
                         <span className="text-gray">رقم الطلب:</span>
-                        <span className="font-bold text-gray-dark">
-                          #{params.id.toUpperCase()}
-                        </span>
+                        <span className="font-bold text-gray-dark">#{params.id.toUpperCase()}</span>
                       </div>
 
                       <div className="flex items-center justify-between p-3 bg-beige rounded-lg">
@@ -124,9 +146,7 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
 
                       <div className="flex items-center justify-between p-3 bg-beige rounded-lg">
                         <span className="text-gray">قيمة التبرع:</span>
-                        <span className="font-bold text-maroon text-xl">
-                          10 د.ب
-                        </span>
+                        <span className="font-bold text-maroon text-xl">10 د.ب</span>
                       </div>
 
                       <div className="flex items-center justify-between p-3 bg-beige rounded-lg">
@@ -138,10 +158,7 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
                     <div className="mt-6 p-4 bg-gold/10 rounded-lg border border-gold/20">
                       <p className="text-sm text-gray-dark flex items-start gap-2">
                         <CheckCircle className="w-5 h-5 text-success flex-shrink-0 mt-0.5" />
-                        <span>
-                          تم إرسال البطاقة إلى البريد الإلكتروني للمستلم، كما يمكنك مشاركة
-                          الرابط مباشرة عبر قنوات التواصل المختلفة.
-                        </span>
+                        <span>تم إرسال البطاقة إلى البريد الإلكتروني للمستلم. يمكنك كذلك إرسالها عبر واتساب.</span>
                       </p>
                     </div>
                   </div>
@@ -150,22 +167,29 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
 
               {/* Share Section */}
               <div className="bg-white rounded-2xl shadow-lg p-8 mb-8 border border-gray-lighter animate-fade-in">
-                <h2 className="text-2xl font-bold text-gray-dark mb-6 text-center">
-                  شارك البطاقة مع المستلم
-                </h2>
+                <h2 className="text-2xl font-bold text-gray-dark mb-6 text-center">شارك البطاقة</h2>
+
+                {/* زر مخصص لإرسال البطاقة للمستلم عبر واتساب */}
+                <div className="mb-6 text-center">
+                  <button
+                    onClick={handleSendToRecipient}
+                    className="btn-primary inline-flex items-center gap-2 px-6 py-3 mb-4"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    إرسال البطاقة إلى المستلم عبر واتساب
+                  </button>
+                  {recipientWhatsapp && (
+                    <p className="text-xs text-gray">
+                      سيتم استخدام الرقم: <span className="font-mono">{recipientWhatsapp}</span>
+                    </p>
+                  )}
+                </div>
 
                 {/* Share URL */}
                 <div className="mb-6">
-                  <label className="block text-gray font-medium mb-2">
-                    رابط البطاقة
-                  </label>
+                  <label className="block text-gray font-medium mb-2">رابط البطاقة</label>
                   <div className="flex gap-2">
-                    <input
-                      type="text"
-                      value={cardUrl}
-                      readOnly
-                      className="input-field flex-1"
-                    />
+                    <input type="text" value={cardUrl} readOnly className="input-field flex-1" />
                     <button
                       onClick={handleCopy}
                       className={`px-6 py-3 rounded-lg font-medium transition-all duration-base ${
@@ -182,7 +206,7 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
                       ) : (
                         <>
                           <Copy className="w-5 h-5 inline mr-2" />
-                          نسخ الرابط
+                          نسخ
                         </>
                       )}
                     </button>
@@ -192,67 +216,59 @@ export default function DeliveredPage({ params }: { params: { id: string } }) {
                 {/* Share Buttons */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                   <button
-                    onClick={() => handleShare('whatsapp')}
+                    onClick={() => handleShareGeneric('whatsapp')}
                     className="flex flex-col items-center gap-2 p-4 bg-[#25D366]/10 hover:bg-[#25D366]/20 rounded-lg transition-all duration-base"
                   >
                     <MessageCircle className="w-8 h-8 text-[#25D366]" />
-                    <span className="text-sm font-medium text-gray-dark">
-                      واتساب
-                    </span>
+                    <span className="text-sm font-medium text-gray-dark">واتساب</span>
                   </button>
 
                   <button
-                    onClick={() => handleShare('email')}
+                    onClick={() => handleShareGeneric('email')}
                     className="flex flex-col items-center gap-2 p-4 bg-maroon/10 hover:bg-maroon/20 rounded-lg transition-all duration-base"
                   >
                     <Mail className="w-8 h-8 text-maroon" />
-                    <span className="text-sm font-medium text-gray-dark">
-                      بريد إلكتروني
-                    </span>
+                    <span className="text-sm font-medium text-gray-dark">بريد</span>
                   </button>
 
                   <button
-                    onClick={() => handleShare('facebook')}
+                    onClick={() => handleShareGeneric('facebook')}
                     className="flex flex-col items-center gap-2 p-4 bg-[#1877F2]/10 hover:bg-[#1877F2]/20 rounded-lg transition-all duration-base"
                   >
                     <Facebook className="w-8 h-8 text-[#1877F2]" />
-                    <span className="text-sm font-medium text-gray-dark">
-                      فيسبوك
-                    </span>
+                    <span className="text-sm font-medium text-gray-dark">فيسبوك</span>
                   </button>
 
                   <button
-                    onClick={() => handleShare('twitter')}
+                    onClick={() => handleShareGeneric('twitter')}
                     className="flex flex-col items-center gap-2 p-4 bg-[#1DA1F2]/10 hover:bg-[#1DA1F2]/20 rounded-lg transition-all duration-base"
                   >
                     <Twitter className="w-8 h-8 text-[#1DA1F2]" />
-                    <span className="text-sm font-medium text-gray-dark">
-                      تويتر
-                    </span>
+                    <span className="text-sm font-medium text-gray-dark">تويتر</span>
                   </button>
                 </div>
               </div>
 
-              {/* Actions */}
-              <div className="grid md:grid-cols-2 gap-4 animate-fade-in">
-                <button className="btn-outline">
-                  <Download className="w-5 h-5 ml-2" />
-                  تحميل البطاقة (PDF)
+              {/* Actions for sender */}
+              <div className="grid md:grid-cols-3 gap-4 mb-8 animate-fade-in">
+                <button onClick={handleSendConfirmationToSender} className="btn-outline">
+                  إرسال تأكيد للمرسل عبر واتساب
                 </button>
-                <Link href="/cards/all" className="btn-primary text-center">
-                  <Heart className="w-5 h-5 ml-2" />
-                  أرسل بطاقة خير جديدة
+                <Link href="/cards/all" className="btn-secondary text-center">
+                  إرسال بطاقة أخرى
                 </Link>
+                <button onClick={handleContactSupport} className="btn-outline">
+                  التواصل مع خدمة العملاء في واتساب
+                </button>
               </div>
 
               {/* Thank You Message */}
               <div className="mt-12 text-center bg-gradient-to-br from-maroon to-maroon-dark rounded-2xl p-12 text-white animate-fade-in">
                 <Heart className="w-16 h-16 mx-auto mb-4" fill="currentColor" />
-                <h2 className="text-3xl font-bold mb-4">شكراً لمساهمتك الكريمة</h2>
+                <h2 className="text-3xl font-bold mb-4">شكراً لمساهمتك</h2>
                 <p className="text-lg text-white/90 leading-relaxed max-w-2xl mx-auto">
-                  تبرعك البالغ 10 دنانير بحرينية يساهم في دعم البرامج والمشاريع الإنسانية
-                  التي تقدمها المؤسسة الملكية للأعمال الإنسانية في مملكة البحرين، ويُحدث أثراً
-                  حقيقياً في حياة الأيتام والأسر المحتاجة.
+                  تبرعك البالغ 10 دنانير بحرينية سيساهم في دعم المشاريع الإنسانية والخيرية التي تقوم بها
+                  مؤسسة البحرين الملكية للأعمال الإنسانية.
                 </p>
               </div>
             </div>

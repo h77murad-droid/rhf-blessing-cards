@@ -8,14 +8,12 @@ import Footer from '@/components/Footer';
 
 export default function PersonalizePage({ params }: { params: { cardId: string } }) {
   const router = useRouter();
-
-  // نموذج البيانات الاساسي للبطاقة
   const [formData, setFormData] = useState({
     recipientName: '',
     recipientEmail: '',
-    recipientPhone: '',   // رقم واتساب المستلم
+    recipientWhatsapp: '',
     senderName: '',
-    senderPhone: '',      // رقم واتساب المرسل
+    senderWhatsapp: '',
     message: '',
     fontStyle: 'Tajawal',
     cardColor: 'maroon',
@@ -24,12 +22,13 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // TODO: في النسخة الفعلية
-    // 1) حفظ بيانات البطاقة والمرسل والمستلم في قاعدة البيانات (Supabase)
-    // 2) تمرير البيانات لصفحة الدفع مع رقم الطلب
-    // 3) بعد نجاح الدفع، استدعاء API لإرسال رسالة واتساب للمستلم والمرسل
+    // في الإنتاج يتم حفظ البيانات ثم الانتقال للدفع
+    const query = new URLSearchParams({
+      recipientWhatsapp: formData.recipientWhatsapp,
+      senderWhatsapp: formData.senderWhatsapp,
+    });
 
-    router.push('/payment');
+    router.push(`/payment?${query.toString()}`);
   };
 
   const handleChange = (
@@ -40,6 +39,8 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
       [e.target.name]: e.target.value,
     });
   };
+
+  const whatsappHint = 'مثال: +97333123456';
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -54,7 +55,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
               <span className="text-gradient-maroon">بطاقتك</span>
             </h1>
             <p className="text-lg text-gray max-w-2xl mx-auto">
-              أضف لمستك الشخصية واجعل البطاقة مميزة تصل للمستلم عبر الواتساب في النسخة النهائية من النظام
+              أضف لمستك الشخصية واجعل البطاقة مميزة
             </p>
           </div>
         </section>
@@ -70,13 +71,15 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                     <Palette className="w-6 h-6 text-maroon" />
                     معاينة البطاقة
                   </h2>
-                  
+
                   <div className="bg-gradient-to-br from-beige to-white rounded-2xl p-8 shadow-lg border-2 border-gray-lighter">
-                    <div 
+                    <div
                       className={`aspect-card rounded-xl shadow-xl overflow-hidden ${
-                        formData.cardColor === 'maroon' ? 'bg-gradient-to-br from-maroon to-maroon-dark' :
-                        formData.cardColor === 'gold' ? 'bg-gradient-to-br from-gold to-gold-dark' :
-                        'bg-gradient-to-br from-gray to-gray-dark'
+                        formData.cardColor === 'maroon'
+                          ? 'bg-gradient-to-br from-maroon to-maroon-dark'
+                          : formData.cardColor === 'gold'
+                          ? 'bg-gradient-to-br from-gold to-gold-dark'
+                          : 'bg-gradient-to-br from-gray to-gray-dark'
                       }`}
                     >
                       <div className="h-full flex flex-col items-center justify-center p-8 text-white text-center">
@@ -92,9 +95,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                           {formData.message || 'رسالتك الشخصية ستظهر هنا...'}
                         </p>
                         <div className="mt-auto pt-6 border-t border-white/20 w-full">
-                          <p className="text-sm">
-                            من: {formData.senderName || 'اسم المرسل'}
-                          </p>
+                          <p className="text-sm">من: {formData.senderName || 'اسم المرسل'}</p>
                         </div>
                       </div>
                     </div>
@@ -104,16 +105,6 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                         <span className="text-gray">قيمة التبرع:</span>
                         <span className="text-2xl font-bold text-maroon">10 د.ب</span>
                       </div>
-                    </div>
-
-                    <div className="mt-4 p-3 bg-beige rounded-lg border border-gray-lighter text-xs text-gray">
-                      في النسخة الفعلية من النظام سيتم:
-                      <br />
-                      1. توليد صورة للبطاقة تحمل هذه البيانات
-                      <br />
-                      2. إرسالها تلقائيا عبر الواتساب للمستلم
-                      <br />
-                      3. إرسال إشعار تأكيد للمرسل عبر الواتساب أيضا
                     </div>
                   </div>
                 </div>
@@ -133,7 +124,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       <User className="w-5 h-5 text-maroon" />
                       معلومات المستلم
                     </h3>
-                    
+
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="recipientName" className="block text-gray font-medium mb-2">
@@ -152,7 +143,10 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       </div>
 
                       <div>
-                        <label htmlFor="recipientEmail" className="block text-gray font-medium mb-2">
+                        <label
+                          htmlFor="recipientEmail"
+                          className="block text-gray font-medium mb-2"
+                        >
                           البريد الإلكتروني للمستلم *
                         </label>
                         <input
@@ -168,18 +162,23 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       </div>
 
                       <div>
-                        <label htmlFor="recipientPhone" className="block text-gray font-medium mb-2">
-                          رقم الواتساب للمستلم *
+                        <label
+                          htmlFor="recipientWhatsapp"
+                          className="block text-gray font-medium mb-2"
+                        >
+                          رقم واتساب المستلم (دولي) *
                         </label>
                         <input
                           type="tel"
-                          id="recipientPhone"
-                          name="recipientPhone"
-                          value={formData.recipientPhone}
+                          id="recipientWhatsapp"
+                          name="recipientWhatsapp"
+                          value={formData.recipientWhatsapp}
                           onChange={handleChange}
                           required
+                          pattern="\+\d{7,15}"
+                          title="الرجاء إدخال رقم دولي بصيغة +97333123456"
                           className="input-field"
-                          placeholder="+9735XXXXXXX"
+                          placeholder={whatsappHint}
                         />
                       </div>
                     </div>
@@ -188,7 +187,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                   {/* Sender Info */}
                   <div className="bg-beige rounded-xl p-6">
                     <h3 className="font-bold text-gray-dark mb-4">معلومات المرسل</h3>
-                    
+
                     <div className="space-y-4">
                       <div>
                         <label htmlFor="senderName" className="block text-gray font-medium mb-2">
@@ -207,22 +206,24 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                       </div>
 
                       <div>
-                        <label htmlFor="senderPhone" className="block text-gray font-medium mb-2">
-                          رقم الواتساب للمرسل *
+                        <label
+                          htmlFor="senderWhatsapp"
+                          className="block text-gray font-medium mb-2"
+                        >
+                          رقم واتسابك (دولي) *
                         </label>
                         <input
                           type="tel"
-                          id="senderPhone"
-                          name="senderPhone"
-                          value={formData.senderPhone}
+                          id="senderWhatsapp"
+                          name="senderWhatsapp"
+                          value={formData.senderWhatsapp}
                           onChange={handleChange}
                           required
+                          pattern="\+\d{7,15}"
+                          title="الرجاء إدخال رقم دولي بصيغة +97333123456"
                           className="input-field"
-                          placeholder="+9733XXXXXXX"
+                          placeholder={whatsappHint}
                         />
-                        <p className="text-xs text-gray-light mt-1">
-                          في النسخة النهائية سيتم إرسال تأكيد العملية ورابط البطاقة إلى هذا الرقم عبر الواتساب.
-                        </p>
                       </div>
                     </div>
                   </div>
@@ -230,7 +231,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                   {/* Message */}
                   <div className="bg-beige rounded-xl p-6">
                     <h3 className="font-bold text-gray-dark mb-4">رسالتك الشخصية</h3>
-                    
+
                     <div>
                       <label htmlFor="message" className="block text-gray font-medium mb-2">
                         الرسالة *
@@ -257,7 +258,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                   {/* Customization */}
                   <div className="bg-beige rounded-xl p-6">
                     <h3 className="font-bold text-gray-dark mb-4">التخصيص</h3>
-                    
+
                     <div className="grid sm:grid-cols-2 gap-4">
                       <div>
                         <label htmlFor="fontStyle" className="block text-gray font-medium mb-2">
@@ -303,10 +304,7 @@ export default function PersonalizePage({ params }: { params: { cardId: string }
                     >
                       العودة
                     </button>
-                    <button
-                      type="submit"
-                      className="btn-primary flex-1"
-                    >
+                    <button type="submit" className="btn-primary flex-1">
                       متابعة للدفع
                       <ArrowLeft className="w-5 h-5 mr-2" />
                     </button>
