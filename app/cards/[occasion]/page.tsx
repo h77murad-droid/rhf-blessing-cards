@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { Search, Filter } from 'lucide-react';
 import Navbar from '@/components/Navbar';
 import Footer from '@/components/Footer';
 import CardItem from '@/components/CardItem';
-import { supabase } from '@/lib/supabaseClient';
 
 type OccasionSlug =
   | 'all'
@@ -15,24 +14,6 @@ type OccasionSlug =
   | 'condolences'
   | 'appreciation'
   | 'general';
-
-interface DbCard {
-  id: string;
-  title_ar: string;
-  description_ar: string | null;
-  price: number | null;
-  image_url: string | null;
-  // لو لاحقاً حبيت تضيف حقل للمناسبة (نص) في الجدول تحطه هنا
-  // occasion_label_ar?: string | null;
-}
-
-interface UiCard {
-  id: string;
-  title: string;
-  occasion: string;
-  price: number;
-  image?: string;
-}
 
 export default function CardsGalleryPage({
   params,
@@ -60,9 +41,25 @@ export default function CardsGalleryPage({
     getInitialFilter(params.occasion),
   );
 
-  const [cards, setCards] = useState<UiCard[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  // بيانات تجريبية – مستقبلاً تستبدل ببيانات من قاعدة البيانات / API
+  const allCards = [
+    { id: '1', title: 'بطاقة زفاف مباركة', occasion: 'الأفراح', price: 10 },
+    { id: '2', title: 'تهنئة مولود جديد', occasion: 'الأفراح', price: 8 },
+    { id: '3', title: 'عيد مبارك', occasion: 'دينية', price: 5 },
+    { id: '4', title: 'رمضان كريم', occasion: 'دينية', price: 5 },
+    { id: '5', title: 'مبروك التخرج', occasion: 'اجتماعية', price: 7 },
+    { id: '6', title: 'ألف مبروك الترقية', occasion: 'اجتماعية', price: 7 },
+    { id: '7', title: 'عزاء ومواساة', occasion: 'تعازي', price: 10 },
+    { id: '8', title: 'الله يرحمه', occasion: 'تعازي', price: 10 },
+    { id: '9', title: 'شكراً لك', occasion: 'شكر', price: 6 },
+    { id: '10', title: 'تقديراً لجهودك', occasion: 'شكر', price: 8 },
+    { id: '11', title: 'عيد ميلاد سعيد', occasion: 'عامة', price: 5 },
+    { id: '12', title: 'يوم جميل', occasion: 'عامة', price: 5 },
+    { id: '13', title: 'تهنئة خطوبة', occasion: 'الأفراح', price: 10 },
+    { id: '14', title: 'جمعة مباركة', occasion: 'دينية', price: 3 },
+    { id: '15', title: 'مبروك النجاح', occasion: 'اجتماعية', price: 7 },
+    { id: '16', title: 'شفاك الله', occasion: 'عامة', price: 5 },
+  ];
 
   const filters: { id: OccasionSlug; label: string }[] = [
     { id: 'all', label: 'الكل' },
@@ -74,56 +71,16 @@ export default function CardsGalleryPage({
     { id: 'general', label: 'مناسبات عامة' },
   ];
 
-  // ❶ جلب البيانات من Supabase أول ما تفتح الصفحة
-  useEffect(() => {
-    async function fetchCards() {
-      try {
-        setLoading(true);
-        setErrorMsg(null);
-
-        const { data, error } = await supabase
-          .from('cards')
-          .select('id, title_ar, description_ar, price, image_url')
-          .eq('is_active', true)
-          .order('created_at', { ascending: false });
-
-        if (error) {
-          console.error('Supabase error:', error);
-          setErrorMsg('حدث خطأ أثناء جلب البطاقات. يرجى المحاولة لاحقاً.');
-          return;
-        }
-
-        const dbCards = (data || []) as DbCard[];
-
-        // تحويل بيانات Supabase إلى الشكل اللي يفهمه CardItem
-        const uiCards: UiCard[] = dbCards.map((card) => ({
-          id: card.id,
-          title: card.title_ar || 'بطاقة خير',
-          occasion: 'مناسبة خيرية', // مؤقتاً إلى أن نربطها بحقل من الجدول أو جدول المناسبات
-          price: card.price !== null ? Number(card.price) : 10,
-          image: card.image_url || undefined, // لو فاضي بيستخدم الصورة الافتراضية من CardItem
-        }));
-
-        setCards(uiCards);
-      } catch (err) {
-        console.error(err);
-        setErrorMsg('تعذر الاتصال بقاعدة البيانات.');
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    fetchCards();
-  }, []);
-
-  // ❷ الفلترة (حالياً بالبحث فقط، والفلتر حسب النوع بنربطه لاحقاً مع حقول Supabase)
-  const filteredCards = cards.filter((card) => {
-    const matchesSearch = card.title
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
-
-    // حالياً ما عندنا حقل نوع/تصنيف من Supabase، فبنخلي الفلتر "شَكلي" لحد ما نربط المناسبات
-    const matchesFilter = selectedFilter === 'all';
+  const filteredCards = allCards.filter((card) => {
+    const matchesSearch = card.title.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesFilter =
+      selectedFilter === 'all' ||
+      (selectedFilter === 'celebrations' && card.occasion === 'الأفراح') ||
+      (selectedFilter === 'religious' && card.occasion === 'دينية') ||
+      (selectedFilter === 'social' && card.occasion === 'اجتماعية') ||
+      (selectedFilter === 'condolences' && card.occasion === 'تعازي') ||
+      (selectedFilter === 'appreciation' && card.occasion === 'شكر') ||
+      (selectedFilter === 'general' && card.occasion === 'عامة');
 
     return matchesSearch && matchesFilter;
   });
@@ -145,14 +102,11 @@ export default function CardsGalleryPage({
               <span className="text-gradient-maroon">بطاقات الخير</span>
             </h1>
             <p className="text-lg text-gray max-w-2xl mx-auto">
-              تصفح البطاقات الرقمية الخيرية المصممة لمختلف المناسبات، واختر
-              البطاقة التي تعبر عن رسالتك وتحقق أثرًا إنسانيًا في الوقت نفسه.
+              تصفح البطاقات الرقمية الخيرية المصممة لمختلف المناسبات، واختر البطاقة
+              التي تعبر عن رسالتك وتحقق أثرًا إنسانيًا في الوقت نفسه.
             </p>
             <p className="mt-3 text-sm text-gray-light">
-              العرض الحالي:{' '}
-              <span className="font-medium text-maroon">
-                {currentFilterLabel}
-              </span>
+              العرض الحالي: <span className="font-medium text-maroon">{currentFilterLabel}</span>
             </p>
           </div>
         </section>
@@ -166,14 +120,14 @@ export default function CardsGalleryPage({
                 <Search className="absolute right-4 top-1/2 transform -translate-y-1/2 text-gray-light w-5 h-5" />
                 <input
                   type="text"
-                  placeholder="ابحث باسم البطاقة..."
+                  placeholder="ابحث باسم البطاقة أو المناسبة..."
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="input-field pr-12"
                 />
               </div>
 
-              {/* Filters (حالياً شكلية، نربطها فعلياً بعد ما نحدد هيكلة الـ DB) */}
+              {/* Filters */}
               <div className="flex items-center gap-3 overflow-x-auto pb-2">
                 <Filter className="w-5 h-5 text-gray flex-shrink-0" />
                 {filters.map((filter) => (
@@ -197,59 +151,38 @@ export default function CardsGalleryPage({
         {/* Cards Grid */}
         <section className="section-spacing bg-white">
           <div className="container-custom">
-            {/* حالة التحميل / الخطأ */}
-            {loading && (
-              <div className="text-center py-16">
-                <p className="text-gray">جاري تحميل البطاقات...</p>
-              </div>
-            )}
+            {/* Results Count */}
+            <div className="mb-6">
+              <p className="text-gray">
+                تم العثور على{' '}
+                <span className="font-bold text-maroon">{filteredCards.length}</span>{' '}
+                بطاقة تطابق معايير البحث.
+              </p>
+            </div>
 
-            {errorMsg && !loading && (
-              <div className="text-center py-16">
-                <p className="text-error">{errorMsg}</p>
+            {/* Cards Grid */}
+            {filteredCards.length > 0 ? (
+              <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                {filteredCards.map((card, index) => (
+                  <div
+                    key={card.id}
+                    className="animate-fade-in"
+                    style={{ animationDelay: `${index * 30}ms` }}
+                  >
+                    <CardItem {...card} />
+                  </div>
+                ))}
               </div>
-            )}
-
-            {!loading && !errorMsg && (
-              <>
-                {/* Results Count */}
-                <div className="mb-6">
-                  <p className="text-gray">
-                    تم العثور على{' '}
-                    <span className="font-bold text-maroon">
-                      {filteredCards.length}
-                    </span>{' '}
-                    بطاقة تطابق معايير البحث.
-                  </p>
+            ) : (
+              <div className="text-center py-16">
+                <div className="w-24 h-24 bg-beige rounded-full flex items-center justify-center mx-auto mb-6">
+                  <Search className="w-12 h-12 text-gray-light" />
                 </div>
-
-                {/* Cards Grid */}
-                {filteredCards.length > 0 ? (
-                  <div className="grid sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-                    {filteredCards.map((card, index) => (
-                      <div
-                        key={card.id}
-                        className="animate-fade-in"
-                        style={{ animationDelay: `${index * 30}ms` }}
-                      >
-                        <CardItem {...card} />
-                      </div>
-                    ))}
-                  </div>
-                ) : (
-                  <div className="text-center py-16">
-                    <div className="w-24 h-24 bg-beige rounded-full flex items-center justify-center mx-auto mb-6">
-                      <Search className="w-12 h-12 text-gray-light" />
-                    </div>
-                    <h3 className="text-2xl font-bold text-gray-dark mb-2">
-                      لا توجد نتائج مطابقة
-                    </h3>
-                    <p className="text-gray">
-                      جرّب تعديل كلمات البحث للاطلاع على بطاقات أخرى.
-                    </p>
-                  </div>
-                )}
-              </>
+                <h3 className="text-2xl font-bold text-gray-dark mb-2">لا توجد نتائج مطابقة</h3>
+                <p className="text-gray">
+                  جرّب تعديل كلمات البحث أو تغيير الفلاتر للاطلاع على بطاقات أخرى.
+                </p>
+              </div>
             )}
           </div>
         </section>
@@ -262,9 +195,8 @@ export default function CardsGalleryPage({
                 لم تجد البطاقة التي في بالك؟
               </h2>
               <p className="text-lg mb-8 text-white/90">
-                نعمل على إضافة تصاميم جديدة لبطاقات الخير بشكل مستمر. اشترك في
-                النشرة البريدية ليصلك كل جديد من المنصة التابعة للمؤسسة الملكية
-                للأعمال الإنسانية.
+                نعمل على إضافة تصاميم جديدة لبطاقات الخير بشكل مستمر. اشترك في النشرة
+                البريدية ليصلك كل جديد من المنصة التابعة للمؤسسة الملكية للأعمال الإنسانية.
               </p>
               <button className="btn-secondary">
                 اشترك في النشرة البريدية
